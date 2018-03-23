@@ -13,15 +13,12 @@ namespace CGImageTest
         partial void UIButton394_TouchUpInside(UIButton sender)
         {
             System.Diagnostics.Debug.WriteLine($"Pressed : {GC.GetTotalMemory(false)} are used");
-            var imageRect = new RectangleF(0f, 0f, 100f, 100f);
-            using (var myImage = new UIImageView(imageRect))
             using (var cgImage = CreateImageWithAutoReleasePool(count++))
+            using (var uiImage = new UIImage(cgImage))
             {
-                ImageView.Image = new UIImage(cgImage);
-                myImage.Opaque = true;
+                ImageView.Image = uiImage;
             }
             System.Diagnostics.Debug.WriteLine($" Before GC : {GC.GetTotalMemory(false) - baseMemory}");
-            ImageView.Image.Dispose();
             GC.Collect();
             System.Diagnostics.Debug.WriteLine($" After GC : {GC.GetTotalMemory(false) - baseMemory}");
             System.Diagnostics.Debug.WriteLine($"Total : {GC.GetTotalMemory(false)} are used");
